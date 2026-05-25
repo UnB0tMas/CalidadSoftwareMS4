@@ -1,4 +1,3 @@
-// ruta: src/main/java/com/upsjb/ms4/config/KafkaTopicProperties.java
 package com.upsjb.ms4.config;
 
 import com.upsjb.ms4.shared.constants.KafkaTopics;
@@ -55,7 +54,7 @@ public record KafkaTopicProperties(
     }
 
     public String deadLetterTopic() {
-        return defaultIfBlank(deadLetter, "ms4.dead-letter.v1");
+        return defaultIfBlank(deadLetter, KafkaTopics.MS4_DEAD_LETTER);
     }
 
     private String defaultIfBlank(String value, String fallback) {

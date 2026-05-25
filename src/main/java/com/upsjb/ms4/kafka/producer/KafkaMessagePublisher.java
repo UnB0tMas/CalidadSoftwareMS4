@@ -1,12 +1,12 @@
-// ruta: src/main/java/com/upsjb/ms4/kafka/producer/KafkaMessagePublisher.java
 package com.upsjb.ms4.kafka.producer;
 
 import com.upsjb.ms4.config.OutboxProperties;
 import com.upsjb.ms4.shared.exception.KafkaPublishException;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
-
 import java.util.concurrent.TimeUnit;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaMessagePublisher {
@@ -22,7 +22,7 @@ public class KafkaMessagePublisher {
         this.outboxProperties = outboxProperties;
     }
 
-    public void publish(String topic, String key, String payloadJson) {
+    public RecordMetadata publish(String topic, String key, String payloadJson) {
         if (topic == null || topic.isBlank()) {
             throw new KafkaPublishException("El topic Kafka es obligatorio.");
         }
@@ -32,9 +32,11 @@ public class KafkaMessagePublisher {
         }
 
         try {
-            kafkaTemplate
+            SendResult<String, String> result = kafkaTemplate
                     .send(topic.trim(), normalizeKey(key), payloadJson)
                     .get(outboxProperties.publishTimeoutMillis(), TimeUnit.MILLISECONDS);
+
+            return result.getRecordMetadata();
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
             throw new KafkaPublishException("La publicación Kafka fue interrumpida.", ex);

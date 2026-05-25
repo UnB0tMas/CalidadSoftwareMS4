@@ -1,4 +1,3 @@
-// ruta: src/main/java/com/upsjb/ms4/kafka/consumer/PrecioSnapshotConsumer.java
 package com.upsjb.ms4.kafka.consumer;
 
 import com.upsjb.ms4.kafka.handler.PrecioSnapshotEventHandler;
@@ -11,9 +10,14 @@ import org.springframework.stereotype.Component;
 public class PrecioSnapshotConsumer {
 
     private final PrecioSnapshotEventHandler handler;
+    private final KafkaConsumerExecutionService executionService;
 
-    public PrecioSnapshotConsumer(PrecioSnapshotEventHandler handler) {
+    public PrecioSnapshotConsumer(
+            PrecioSnapshotEventHandler handler,
+            KafkaConsumerExecutionService executionService
+    ) {
         this.handler = handler;
+        this.executionService = executionService;
     }
 
     @KafkaListener(
@@ -21,7 +25,6 @@ public class PrecioSnapshotConsumer {
             groupId = "${spring.kafka.consumer.group-id:ms4-snapshot-consumer}"
     )
     public void consume(ConsumerRecord<String, String> record, Acknowledgment acknowledgment) {
-        handler.handle(record.topic(), record.key(), record.partition(), record.offset(), record.value());
-        acknowledgment.acknowledge();
+        executionService.consume(record, acknowledgment, handler::handle);
     }
 }

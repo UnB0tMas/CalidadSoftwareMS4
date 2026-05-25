@@ -1,4 +1,3 @@
-// ruta: src/main/java/com/upsjb/ms4/kafka/consumer/PromocionSnapshotConsumer.java
 package com.upsjb.ms4.kafka.consumer;
 
 import com.upsjb.ms4.kafka.handler.PromocionSnapshotEventHandler;
@@ -11,9 +10,14 @@ import org.springframework.stereotype.Component;
 public class PromocionSnapshotConsumer {
 
     private final PromocionSnapshotEventHandler handler;
+    private final KafkaConsumerExecutionService executionService;
 
-    public PromocionSnapshotConsumer(PromocionSnapshotEventHandler handler) {
+    public PromocionSnapshotConsumer(
+            PromocionSnapshotEventHandler handler,
+            KafkaConsumerExecutionService executionService
+    ) {
         this.handler = handler;
+        this.executionService = executionService;
     }
 
     @KafkaListener(
@@ -21,7 +25,6 @@ public class PromocionSnapshotConsumer {
             groupId = "${spring.kafka.consumer.group-id:ms4-snapshot-consumer}"
     )
     public void consume(ConsumerRecord<String, String> record, Acknowledgment acknowledgment) {
-        handler.handle(record.topic(), record.key(), record.partition(), record.offset(), record.value());
-        acknowledgment.acknowledge();
+        executionService.consume(record, acknowledgment, handler::handle);
     }
 }

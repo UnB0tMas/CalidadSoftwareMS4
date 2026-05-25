@@ -1,6 +1,6 @@
-// ruta: src/main/java/com/upsjb/ms4/config/AppPropertiesConfig.java
 package com.upsjb.ms4.config;
 
+import com.upsjb.ms4.kafka.probe.KafkaProbeProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
         CloudinaryProperties.class,
         InternalSecurityProperties.class,
         JwtValidationProperties.class,
-        CorsProperties.class
+        CorsProperties.class,
+        KafkaProbeProperties.class
 })
 public class AppPropertiesConfig {
 }
