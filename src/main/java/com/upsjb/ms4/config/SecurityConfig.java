@@ -1,4 +1,3 @@
-// ruta: src/main/java/com/upsjb/ms4/config/SecurityConfig.java
 package com.upsjb.ms4.config;
 
 import com.upsjb.ms4.security.filter.InternalServiceKeyFilter;
@@ -24,6 +23,22 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    private static final String[] SWAGGER_WHITELIST = {
+            "/swagger-ui.html",
+            "/swagger-ui/index.html",
+            "/swagger-ui/**",
+            "/v3/api-docs",
+            "/v3/api-docs/",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/v3/api-docs.yml"
+    };
+
+    private static final String[] ACTUATOR_PUBLIC_WHITELIST = {
+            "/actuator/health",
+            "/actuator/health/**"
+    };
 
     private final Ms4JwtAuthenticationConverter jwtAuthenticationConverter;
     private final RestAuthenticationEntryPoint authenticationEntryPoint;
@@ -58,13 +73,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        .requestMatchers(
-                                "/actuator/health",
-                                "/actuator/health/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
+                        /*
+                         * Swagger/OpenAPI queda libre únicamente para consulta técnica.
+                         * No libera endpoints funcionales del dominio.
+                         */
+                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
+
+                        .requestMatchers(ACTUATOR_PUBLIC_WHITELIST).permitAll()
 
                         /*
                          * Stripe no usa JWT de usuario.

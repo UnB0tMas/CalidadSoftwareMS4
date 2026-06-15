@@ -1,4 +1,3 @@
-// ruta: src/main/java/com/upsjb/ms4/service/impl/contingencia/ContingenciaServiceImpl.java
 package com.upsjb.ms4.service.impl.contingencia;
 
 import com.upsjb.ms4.domain.entity.contingencia.ModoContingencia;
@@ -31,6 +30,12 @@ import com.upsjb.ms4.shared.pagination.PaginationService;
 import com.upsjb.ms4.specification.InventarioEventoPendienteSpecification;
 import com.upsjb.ms4.specification.ModoContingenciaSpecification;
 import com.upsjb.ms4.validator.ContingenciaValidator;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -38,13 +43,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Clock;
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 @Service
 public class ContingenciaServiceImpl implements ContingenciaService {
@@ -188,7 +186,14 @@ public class ContingenciaServiceImpl implements ContingenciaService {
     public ModoContingenciaResponseDto obtenerContingenciaActual(AuthenticatedUserContext actor) {
         try {
             contingenciaPolicy.authorizeConsultarContingencia(actor);
-            return contingenciaMapper.toModoResponse(resolverContingenciaActiva());
+
+            ModoContingencia activa = buscarContingenciaActivaPorServicio(SERVICIO_MS3);
+
+            if (activa != null) {
+                return contingenciaMapper.toModoResponse(activa);
+            }
+
+            return contingenciaSinModoActivo();
         } catch (BusinessException ex) {
             throw ex;
         } catch (RuntimeException ex) {
@@ -437,6 +442,26 @@ public class ContingenciaServiceImpl implements ContingenciaService {
                         EstadoContingencia.ACTIVO
                 )
                 .orElseThrow(() -> new NotFoundException("No existe contingencia activa para MS3."));
+    }
+
+    private ModoContingenciaResponseDto contingenciaSinModoActivo() {
+        return new ModoContingenciaResponseDto(
+                null,
+                SERVICIO_MS3,
+                EstadoContingencia.FINALIZADO,
+                null,
+                null,
+                null,
+                null,
+                "Sin contingencia activa.",
+                true,
+                false,
+                Math.toIntExact(Math.min(contarEventosReintentables(), Integer.MAX_VALUE)),
+                "No existe modo de contingencia activo para MS3.",
+                true,
+                null,
+                null
+        );
     }
 
     private ModoContingencia buscarContingenciaActivaPorServicio(String servicioAfectado) {

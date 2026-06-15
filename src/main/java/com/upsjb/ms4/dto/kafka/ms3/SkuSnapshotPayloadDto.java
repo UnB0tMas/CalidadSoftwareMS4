@@ -1,10 +1,8 @@
-// ruta: src/main/java/com/upsjb/ms4/dto/kafka/ms3/SkuSnapshotPayloadDto.java
 package com.upsjb.ms4.dto.kafka.ms3;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 public record SkuSnapshotPayloadDto(
         Long idSku,
@@ -26,6 +24,6 @@ public record SkuSnapshotPayloadDto(
         Boolean estado,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
-        List<Map<String, Object>> atributos
+        List<SkuAtributoSnapshotPayloadDto> atributos
 ) {
 }

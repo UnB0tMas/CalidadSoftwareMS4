@@ -21,79 +21,195 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "producto_snapshot_ms3")
 public class ProductoSnapshotMs3 extends BaseEntity {
 
-    @Column(name = "id_producto_ms3", nullable = false)
+    @Column(
+            name = "snapshot_completo",
+            nullable = false
+    )
+    private Boolean snapshotCompleto;
+
+    @Column(name = "snapshot_generado_at")
+    private LocalDateTime snapshotGeneradoAt;
+
+    @Column(
+            name = "id_producto_ms3",
+            nullable = false
+    )
     private Long idProductoMs3;
 
-    @Column(name = "codigo_producto", nullable = false, length = 80)
+    @Column(
+            name = "codigo_producto",
+            nullable = false,
+            length = 80
+    )
     private String codigoProducto;
 
-    @Column(name = "nombre", nullable = false, length = 250)
+    @Column(
+            name = "nombre",
+            nullable = false,
+            length = 250
+    )
     private String nombre;
 
-    @Column(name = "slug", length = 250)
+    @Column(
+            name = "slug",
+            length = 250
+    )
     private String slug;
-
-    @Column(name = "id_tipo_producto_ms3")
-    private Long idTipoProductoMs3;
-
-    @Column(name = "codigo_tipo_producto", length = 80)
-    private String codigoTipoProducto;
-
-    @Column(name = "nombre_tipo_producto", length = 180)
-    private String nombreTipoProducto;
 
     @Column(name = "id_categoria_ms3")
     private Long idCategoriaMs3;
 
-    @Column(name = "codigo_categoria", length = 80)
+    @Column(
+            name = "codigo_categoria",
+            length = 80
+    )
     private String codigoCategoria;
 
-    @Column(name = "nombre_categoria", length = 180)
+    @Column(
+            name = "nombre_categoria",
+            length = 180
+    )
     private String nombreCategoria;
 
-    @Column(name = "slug_categoria", length = 250)
+    @Column(
+            name = "slug_categoria",
+            length = 250
+    )
     private String slugCategoria;
+
+    @Column(name = "nivel_categoria")
+    private Integer nivelCategoria;
+
+    @Column(name = "orden_categoria")
+    private Integer ordenCategoria;
+
+    @Column(name = "categoria_permite_productos")
+    private Boolean categoriaPermiteProductos;
+
+    @Column(name = "categoria_estado")
+    private Boolean categoriaEstado;
+
+    @Column(name = "id_categoria_padre_ms3")
+    private Long idCategoriaPadreMs3;
+
+    @Column(
+            name = "codigo_categoria_padre",
+            length = 80
+    )
+    private String codigoCategoriaPadre;
+
+    @Column(
+            name = "nombre_categoria_padre",
+            length = 180
+    )
+    private String nombreCategoriaPadre;
+
+    @Column(
+            name = "slug_categoria_padre",
+            length = 250
+    )
+    private String slugCategoriaPadre;
+
+    @Column(
+            name = "categoria_ruta_codigo",
+            length = 1000
+    )
+    private String categoriaRutaCodigo;
+
+    @Column(
+            name = "categoria_ruta_nombre",
+            length = 1500
+    )
+    private String categoriaRutaNombre;
+
+    @Column(
+            name = "categoria_ruta_json",
+            columnDefinition = "nvarchar(max)"
+    )
+    private String categoriaRutaJson;
 
     @Column(name = "id_marca_ms3")
     private Long idMarcaMs3;
 
-    @Column(name = "codigo_marca", length = 80)
+    @Column(
+            name = "codigo_marca",
+            length = 80
+    )
     private String codigoMarca;
 
-    @Column(name = "nombre_marca", length = 180)
+    @Column(
+            name = "nombre_marca",
+            length = 180
+    )
     private String nombreMarca;
 
-    @Column(name = "slug_marca", length = 250)
+    @Column(
+            name = "slug_marca",
+            length = 250
+    )
     private String slugMarca;
 
-    @Column(name = "descripcion_corta", length = 500)
+    @Column(name = "marca_estado")
+    private Boolean marcaEstado;
+
+    @Column(
+            name = "descripcion_corta",
+            length = 500
+    )
     private String descripcionCorta;
 
-    @Column(name = "descripcion_larga", columnDefinition = "nvarchar(max)")
+    @Column(
+            name = "descripcion_larga",
+            columnDefinition = "nvarchar(max)"
+    )
     private String descripcionLarga;
 
-    @Column(name = "genero_objetivo", length = 80)
+    @Column(
+            name = "genero_objetivo",
+            length = 80
+    )
     private String generoObjetivo;
 
-    @Column(name = "temporada", length = 80)
+    @Column(
+            name = "temporada",
+            length = 80
+    )
     private String temporada;
 
-    @Column(name = "deporte", length = 120)
+    @Column(
+            name = "deporte",
+            length = 120
+    )
     private String deporte;
 
-    @Column(name = "estado_registro", length = 60)
+    @Column(
+            name = "estado_registro",
+            length = 60
+    )
     private String estadoRegistro;
 
-    @Column(name = "estado_publicacion", length = 60)
+    @Column(
+            name = "estado_publicacion",
+            length = 60
+    )
     private String estadoPublicacion;
 
-    @Column(name = "estado_venta", length = 60)
+    @Column(
+            name = "estado_venta",
+            length = 60
+    )
     private String estadoVenta;
 
-    @Column(name = "visible_publico", nullable = false)
+    @Column(
+            name = "visible_publico",
+            nullable = false
+    )
     private Boolean visiblePublico;
 
-    @Column(name = "vendible", nullable = false)
+    @Column(
+            name = "vendible",
+            nullable = false
+    )
     private Boolean vendible;
 
     @Column(name = "fecha_publicacion_inicio")
@@ -102,42 +218,97 @@ public class ProductoSnapshotMs3 extends BaseEntity {
     @Column(name = "fecha_publicacion_fin")
     private LocalDateTime fechaPublicacionFin;
 
-    @Column(name = "motivo_estado", length = 500)
+    @Column(
+            name = "motivo_estado",
+            length = 500
+    )
     private String motivoEstado;
 
-    @Column(name = "atributos_json", columnDefinition = "nvarchar(max)")
+    @Column(
+            name = "imagen_principal_url",
+            length = 1000
+    )
+    private String imagenPrincipalUrl;
+
+    @Column(
+            name = "plantilla_atributos_json",
+            columnDefinition = "nvarchar(max)"
+    )
+    private String plantillaAtributosJson;
+
+    @Column(
+            name = "atributos_json",
+            columnDefinition = "nvarchar(max)"
+    )
     private String atributosJson;
 
-    @Column(name = "skus_json", columnDefinition = "nvarchar(max)")
+    @Column(
+            name = "skus_json",
+            columnDefinition = "nvarchar(max)"
+    )
     private String skusJson;
 
-    @Column(name = "imagenes_json", columnDefinition = "nvarchar(max)")
+    @Column(
+            name = "imagenes_json",
+            columnDefinition = "nvarchar(max)"
+    )
     private String imagenesJson;
 
-    @Column(name = "event_id", nullable = false, columnDefinition = "uniqueidentifier")
+    @Column(
+            name = "event_id",
+            nullable = false,
+            columnDefinition = "uniqueidentifier"
+    )
     private UUID eventId;
 
-    @Column(name = "event_type", nullable = false, length = 100)
+    @Column(
+            name = "event_type",
+            nullable = false,
+            length = 100
+    )
     private String eventType;
 
-    @Column(name = "aggregate_id", nullable = false, length = 120)
+    @Column(
+            name = "aggregate_id",
+            nullable = false,
+            length = 120
+    )
     private String aggregateId;
 
-    @Column(name = "event_version", nullable = false)
+    @Column(
+            name = "event_version",
+            nullable = false
+    )
     private Integer eventVersion;
 
-    @Column(name = "occurred_at", nullable = false)
+    @Column(
+            name = "occurred_at",
+            nullable = false
+    )
     private LocalDateTime occurredAt;
 
-    @Column(name = "request_id", length = 100)
+    @Column(
+            name = "request_id",
+            length = 100
+    )
     private String requestId;
 
-    @Column(name = "correlation_id", length = 100)
+    @Column(
+            name = "correlation_id",
+            length = 100
+    )
     private String correlationId;
 
-    @Column(name = "payload_json", nullable = false, columnDefinition = "nvarchar(max)")
+    @Column(
+            name = "payload_json",
+            nullable = false,
+            columnDefinition = "nvarchar(max)"
+    )
     private String payloadJson;
 
-    @Column(name = "fecha_sincronizacion", nullable = false)
+    @Column(
+            name = "fecha_sincronizacion",
+            nullable = false
+    )
     private LocalDateTime fechaSincronizacion;
 }
